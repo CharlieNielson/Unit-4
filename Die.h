@@ -4,16 +4,17 @@ using namespace std;
 
 
 class Die{
-   public:
-     Die(int sides);   //Constructor
-     void roll();      //Method Declaration
-     void display();   //Method Declaration
-     void setNumberSides(int sides);//setter Declaration
+    public:
+      Die(int sides);   //Constructor
+      void roll();      //Method Declaration
+      void display();   //Method Declaration
+      void setNumberSides(int sides);//setter Declaration
+      int getDieValue();
 
 
-   private:
-     int value;
-     int numSides;
+    private:
+      int value;
+      int numSides;
 };//End Class
 //Constructor, sets up the class
 Die::Die(int sides): numSides(sides){
@@ -32,4 +33,7 @@ void Die::display(){
   cout << "-----" << endl;
   cout << "| " << value << " |" << endl;
   cout << "-----" << endl;
+}
+int Die::getDieValue() {
+  return value;
 }
