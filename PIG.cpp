@@ -1,25 +1,19 @@
 #include <iostream>
 #include <time.h>
-#include "PIG.h"
+#include "pigPlay.h"
 using namespace std;
 
 int main() {
     srand(time(NULL));  //Set the random seed
-    PIG p1();
-    cout <<  "Thing: " << p1 << endl;
     cout << "The game of PIG!\n";
-    int playerScore = 0;
-    int computerScore = 0;
-    int die = 6;
-    int turnNUM = 0;
+    play player, computer;
     int playCont = 0;
     bool playTurn = true;
-    while (playerScore < 100 && computerScore < 100) {
-        if (playTurn && playerScore < 100 && computerScore < 100) {// Players turn
-            die = 6;
-            turnNUM = 0;
-            while (die > 1) {
-                cout << "Turn score : " << turnNUM << "\nPlayers counted score: " << playerScore << "\nComputers counted score: " << computerScore << "\n1. Roll\n2. Bag points\n";
+    while (player.getTotal() < 100 && computer.getTotal() < 100) {
+        if (playTurn && player.getTotal() < 100 && computer.getTotal() < 100) {// Players turn
+            player.startTurn();
+            while (player.getDieValue() > 1) {
+                cout << "Turn score : " << player.getTurnTotal() << "\nPlayers counted score: " << player.getTotal() << "\nComputers counted score: " << computer.getTotal() << "\n1. Roll\n2. Bag points\n";
                 playCont = 0;
                 while (playCont != 1 && playCont != 2) {
                     cin >> playCont;
@@ -29,45 +23,31 @@ int main() {
                     }
                 }
                 if (playCont == 2) {
-                    playerScore += turnNUM;
-                    die = -1;
-                    cout << "Good choice. Your score is now " << playerScore << endl;
+                    player.stop(true);
                 } else {
-                    die = (rand() % 6) + 1;
-                    cout << "You rolled a " << die << endl;
-                    if (die == 1) {
-                        cout << "Sorry: you rolled a one. Your score will stay at " << playerScore << endl;
-                    } else {
-                        turnNUM += die;
-                    }
+                    player.roll(true);
+                    cout << "You rolled a " << player.getDieValue() << endl;
                 }
                 
             }
             playTurn = false;
             cout << endl;
-        } else if (playerScore < 100 && computerScore < 100) {// Computer's turn.
-            die = 6;
-            turnNUM = 0;
-            while (die > 1 && playTurn == false) {
-                if (turnNUM < 20) {
-                    die = (rand() % 6) + 1;
-                    if (die != 1) {
-                        turnNUM += die;
-                    }
-                    cout << "Computer rolled a " << die << ". They have a turn score of " << turnNUM << endl;
+        } else if (player.getTotal() < 100 && computer.getTotal() < 100) {// Computer's turn.
+            computer.startTurn();
+            while (computer.getDieValue() > 1 && playTurn == false) {
+                if (computer.getTurnTotal() < 20) {
+                    computer.roll(false);
                 } else {
-                    computerScore += turnNUM;
-                    cout << "Computer bagged. Their score is now " << computerScore << endl << endl;
+                    computer.stop(false);
+                    playTurn = true;
+                }
+                if (computer.getDieValue() <= 1) {
                     playTurn = true;
                 }
             }
-            if (playTurn != true) {
-                cout << "Computers score will remain at " << computerScore << endl << endl;
-                playTurn = true;
-            }
         }
     }
-    if (computerScore > playerScore) {
+    if (computer.getTotal() > player.getTotal()) {
         cout << "Sorry, you have lost." << endl;
     } else {
         cout << "Congratulations! You have won!";
