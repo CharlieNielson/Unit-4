@@ -1,10 +1,12 @@
 #include <iostream>
 #include <time.h>
-//#include "pigPlay.h"
+#include "PIG.h"
 using namespace std;
 
 int main() {
     srand(time(NULL));  //Set the random seed
+    PIG p1();
+    cout <<  "Thing: " << p1 << endl;
     cout << "The game of PIG!\n";
     int playerScore = 0;
     int computerScore = 0;
